@@ -1,0 +1,30 @@
+<div class="container-lg py-5">
+  <div class="cat w-75 px-5 py-4 mx-auto mb-3 rounded-3">
+    <h4 class="text-center m-0">ŠIFRANIK KATEGORIJA NEKRETNINA</h4>
+  </div>
+  <div class="cat w-75 p-5 mx-auto">
+    <mat-table [dataSource]="dataSource"
+               class="mat-elevation-z2 w-100">
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef>
+          ŠIFRA
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.realEstateTypeId}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="typeName">
+        <mat-header-cell *matHeaderCellDef>
+          NAZIV
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.typeName}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <mat-header-cell *matHeaderCellDef>
+          OPIS
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.description}}</mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
+</div>

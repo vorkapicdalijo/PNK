@@ -5,6 +5,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
+import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { DeleteRealEstateDialogComponent } from '../dialogs/delete-real-estate-dialog/delete-real-estate-dialog.component';
+import { EditRealEstateDialogComponent } from '../dialogs/edit-real-estate-dialog/edit-real-estate-dialog.component';
+import { AddRealEstateDialogComponent } from '../dialogs/add-real-estate-dialog/add-real-estate-dialog.component';
+
 
 @Component({
   selector: 'app-real-estate',
@@ -19,35 +24,11 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   displayedColumns = ['realEstateName', 'realEstateType', 'realEstateLocation', 'price', 'actions'];
 
-  mockData: RealEstate[] = [
-    {
-      id: 1,
-      realEstateName: 'LUKSUZNI APARTMAN',
-      price: '140 000 €',
-      realEstateCountry: 'Hrvatska',
-      realEstateCity: 'Split',
-      realEstateType: 'APARTMAN'
-    },
-    {
-      id: 2,
-      realEstateName: 'VILLA MARINA',
-      price: '220 000 €',
-      realEstateCountry: 'Hrvatska',
-      realEstateCity: 'Dubrovnik',
-      realEstateType: 'KUĆA'
-    },
-    {
-      id: 3,
-      realEstateName: 'POSLOVNI PROSTOR KVATRIĆ',
-      price: '80 000 €',
-      realEstateCountry: 'Hrvatska',
-      realEstateCity: 'Zagreb',
-      realEstateType: 'POSLOVNI PROSTOR'
-    },
-  ];
+  mockData: RealEstate[] = [];
 
   constructor(private realEstateService: RealEstateService,
-              private router: Router) {}
+              private router: Router,
+              public dialog: MatDialog) {}
 
 
   ngAfterViewInit(): void {
@@ -57,6 +38,7 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.mockData = this.realEstateService.realEstateMockData;
     //dohvati sve nekretnine
     // this.realEstateService.getRealEstates().subscribe((res) => {
     //   this.realEstates = res;
@@ -70,7 +52,7 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
   }
 
   openRealEstateDetails(realEstateId: number) {
-    this.router.navigate([`/real-estates/${realEstateId}`])
+    this.router.navigate([`/real-estates/details/${realEstateId}`])
   }
 
   applyFilter(event: Event) {
@@ -80,5 +62,52 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  //TODO modali?
+  addRealEstate() {
+    //TODO: add service add
+    const dialogRef = this.dialog.open(AddRealEstateDialogComponent,
+      {
+      })
+
+    dialogRef.afterClosed().subscribe((realEstate: RealEstate) => {
+      if(realEstate) {
+        //navigiraj na novu nekretninu u details
+        this.router.navigate([`/real-estates/details/${realEstate.id}`])
+      }
+    })
+  }
+
+  editRealEstate(realEstateId: number) {
+    //TODO: add service edit
+    const dialogRef = this.dialog.open(EditRealEstateDialogComponent,
+      {
+        data: {realEstateId: realEstateId},
+      })
+
+    dialogRef.afterClosed().subscribe((updatedRealEstateId: number) => {
+      if(updatedRealEstateId) {
+        //navigiraj na azuriranu nekretninu u details
+        console.log(updatedRealEstateId)
+        this.router.navigate([`/real-estates/details/${updatedRealEstateId}`])
+      }
+    })
+  }
+
+  deleteRealEstate(realEstate: RealEstate) {
+     //TODO: add service delete
+     const dialogRef = this.dialog.open(DeleteRealEstateDialogComponent,
+       {
+         data: {realEstateName: realEstate.realEstateName},
+         position: {top: '3rem'}
+       })
+
+     dialogRef.afterClosed().subscribe(realEstateId => {
+       //if(result)
+         //TODO: delete by id
+        this.router.navigate([`/real-estates`])
+     })
+
   }
 }

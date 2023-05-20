@@ -8,10 +8,16 @@ import { Router } from '@angular/router';
 })
 export class RealEstateHeaderComponent implements OnInit {
 
+  navLinks = [
+    { path: 'real-estates', label: 'NEKRETNINE' },
+    { path: 'real-estates/categories', label: 'KATEGORIJE' }
+  ];
+
   constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
+
 
   goToHomePage() {
     this.router.navigate(['']);

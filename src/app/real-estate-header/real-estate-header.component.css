@@ -1,6 +1,10 @@
 mat-toolbar {
   height: 5.3rem;
-  background-color: #f2f2f2;
+  background-color: #a3c2c2;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 1000
 }
 
 

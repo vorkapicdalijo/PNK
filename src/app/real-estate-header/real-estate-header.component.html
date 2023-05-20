@@ -1,4 +1,4 @@
-<mat-toolbar>
+<mat-toolbar class="d-flex justify-content-between">
   <div type="button"
        class="d-flex align-items-center"
        (click)="goToHomePage()">
@@ -10,4 +10,15 @@
       <span class="fs-1">Nekretnina</span>
     </div>
   </div>
+
+  <nav mat-tab-nav-bar class="me-5">
+    <a mat-tab-link
+       #rla="routerLinkActive"
+       *ngFor="let link of navLinks;let i=index"
+       [routerLink]="link.path"
+       routerLinkActive="active"
+       [active]="rla.isActive"
+       [routerLinkActiveOptions]="{ exact: true }">{{link.label}}
+    </a>
+  </nav>
 </mat-toolbar>

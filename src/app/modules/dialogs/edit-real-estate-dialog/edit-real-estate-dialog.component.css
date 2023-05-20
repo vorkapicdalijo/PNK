@@ -1,0 +1,9 @@
+.mat-cell:last-child, .mat-header-cell:last-child {
+    justify-content: flex-end;
+  }
+
+  .mat-column-no {
+    max-width: 96px;
+    padding-right: 32px;
+    text-align: center;
+  }

@@ -1,0 +1,170 @@
+<h2 mat-dialog-title
+    class="mb-0">Uredi nekretninu</h2>
+<hr class="mt-2 mb-3">
+<div mat-dialog-content>
+  <form [formGroup]="editForm"
+        (ngSubmit)="onSubmit(editForm)"
+        class="p-5 pt-2 row">
+    <mat-form-field appearance="outline"
+                    class="col">
+      <mat-label>
+        Naziv nekretnine
+      </mat-label>
+      <input matInput
+             formControlName="realEstateName">
+    </mat-form-field>
+    <mat-form-field appearance="outline"
+                    class="col">
+      <mat-label>Kategorija</mat-label>
+      <mat-select formControlName="realEstateTypeId">
+        <mat-option [value]="type.realEstateTypeId"
+                    *ngFor="let type of realEstateTypes">{{ type.typeName }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline"
+                    class="col">
+      <mat-label>
+        Cijena (€)
+      </mat-label>
+      <input matInput
+             formControlName="price">
+    </mat-form-field>
+    <mat-form-field appearance="outline"
+                    class="col">
+      <mat-label>
+        Država
+      </mat-label>
+      <input matInput
+             formControlName="realEstateCountry">
+    </mat-form-field>
+    <mat-form-field appearance="outline"
+                    class="col">
+      <mat-label>
+        Grad
+      </mat-label>
+      <input matInput
+             formControlName="realEstateCity">
+    </mat-form-field>
+  </form>
+  <form [formGroup]="contentEditForm">
+    <div class="mb-2 d-flex justify-content-between align-items-center">
+      <h5>Uredi sadržaj</h5>
+      <button class="p-0 me-1 btn btn-secondary px-3 py-1"
+              (click)="addContent()"
+              [disabled]="addingContent">
+        <i class="las la-plus la-md me-1"></i>
+        <span>Dodaj sadržaj</span>
+      </button>
+    </div>
+    <div>
+      <mat-table [dataSource]="contentDataSource"
+                 class="mat-elevation-z1 w-100">
+        <ng-container matColumnDef="no">
+          <mat-header-cell *matHeaderCellDef>
+            #
+          </mat-header-cell>
+          <mat-cell *matCellDef="let elementM let i = index">{{i+1}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="contentName">
+          <mat-header-cell *matHeaderCellDef>
+            NAZIV
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <span *ngIf="selectedContent.contentId!=element.contentId">{{element.contentName}}</span>
+            <mat-form-field appearance="outline"
+                            class="mt-3 w-75 p-0"
+                            *ngIf="editingContent && selectedContent.contentId==element.contentId">
+              <mat-label>
+                Naziv nekretnine
+              </mat-label>
+              <input matInput
+                     formControlName="contentName">
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="quantity">
+          <mat-header-cell *matHeaderCellDef>
+            KOLIČINA
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <span *ngIf="selectedContent.contentId!=element.contentId">{{element.quantity}}</span>
+            <mat-form-field appearance="outline"
+                            class="mt-3 w-50 p-0"
+                            *ngIf="editingContent && selectedContent.contentId==element.contentId">
+              <mat-label>
+                Količina
+              </mat-label>
+              <input matInput
+                     type="number"
+                     formControlName="quantity">
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="description">
+          <mat-header-cell *matHeaderCellDef>
+            OPIS
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <span *ngIf="selectedContent.contentId!=element.contentId">{{element.description}}</span>
+            <mat-form-field appearance="outline"
+                            class="mt-3 w-100 pe-3"
+                            *ngIf="editingContent && selectedContent.contentId==element.contentId">
+              <mat-label>
+                Opis
+              </mat-label>
+              <textarea matInput
+                        rows="1"
+                        formControlName="description"></textarea>
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="actions"
+                      justify="end">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element"
+                    class="float-end">
+            <button class="p-0 me-1 btn btn-info px-3"
+                    matTooltip="Uredi"
+                    (click)="editContent(element.contentId)"
+                    *ngIf="!editingContent || selectedContent.contentId!=element.contentId">
+              <i class="las la-edit la-md"></i>
+            </button>
+            <button class="p-0 me-1 btn btn-success px-3"
+                    matTooltip="Spremi"
+                    (click)="saveContent(contentEditForm)"
+                    *ngIf="editingContent && selectedContent.contentId==element.contentId"
+                    [disabled]="!contentEditForm.valid">
+              <i class="las la-save"></i>
+            </button>
+            <button class="p-0 me-1 btn btn-warning px-3"
+                    matTooltip="Odustani"
+                    *ngIf="editingContent && selectedContent.contentId==element.contentId"
+                    (click)="cancelContent()">
+              <i class="las la-times"></i>
+            </button>
+
+            <button class="p-0 ms-1 btn btn-danger px-3"
+                    matTooltip="Izbriši"
+                    (click)="deleteContent(element.contentId)">
+              <i class="las la-trash-alt la-md"></i>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
+
+  </form>
+</div>
+<div mat-dialog-actions
+     class="d-flex justify-content-center">
+  <button mat-raised-button
+          (click)="onNoClick()">Odustani</button>
+  <button mat-raised-button
+          class="btn btn-secondary"
+          type="submit"
+          (click)="onSubmit(editForm)"
+          [mat-dialog-close]="realEstateId"
+          cdkFocusInitial>Uredi</button>
+</div>

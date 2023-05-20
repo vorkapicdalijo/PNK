@@ -14,7 +14,8 @@
   </div>
 
   <div class="d-flex justify-content-between w-75 mb-3">
-    <button mat-raised-button class="btn btn-secondary py-1">
+    <button mat-raised-button class="btn btn-secondary py-1"
+            (click)="addRealEstate()">
       <i class="las la-home la-md me-2"></i>
       <span>Dodaj nekretninu</span>
     </button>
@@ -49,19 +50,21 @@
                         mat-sort-header>
           CIJENA
         </mat-header-cell>
-        <mat-cell *matCellDef="let element">{{element.price}}</mat-cell>
+        <mat-cell *matCellDef="let element">{{element.price + " €"}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="actions"
                     justify="end">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
         <mat-cell *matCellDef="let element"
                   class="float-end">
-          <button class="p-0 me-1 btn btn-light px-3"
-                  matTooltip="Uredi">
+          <button class="p-0 me-1 btn btn-info px-3"
+                  matTooltip="Uredi"
+                  (click)="editRealEstate(element.id); $event.stopPropagation()">
             <i class="las la-edit la-md"></i>
           </button>
           <button class="p-0 ms-1 btn btn-danger px-3"
-                  matTooltip="Izbriši">
+                  matTooltip="Izbriši"
+                  (click)="deleteRealEstate(element); $event.stopPropagation()">
             <i class="las la-trash-alt la-md"></i>
           </button>
         </mat-cell>

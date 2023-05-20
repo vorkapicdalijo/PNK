@@ -19,6 +19,13 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DeleteRealEstateDialogComponent } from './modules/dialogs/delete-real-estate-dialog/delete-real-estate-dialog.component';
+import { EditRealEstateDialogComponent } from './modules/dialogs/edit-real-estate-dialog/edit-real-estate-dialog.component';
+import { AddRealEstateDialogComponent } from './modules/dialogs/add-real-estate-dialog/add-real-estate-dialog.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import { RealEstateCategoriesComponent } from './modules/real-estate-categories/real-estate-categories.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -27,6 +34,10 @@ import { MatSortModule } from '@angular/material/sort';
     RealEstateDetailsComponent,
     RealEstateHeaderComponent,
     RealEstateFooterComponent,
+    DeleteRealEstateDialogComponent,
+    EditRealEstateDialogComponent,
+    AddRealEstateDialogComponent,
+    RealEstateCategoriesComponent,
 
   ],
   imports: [
@@ -46,6 +57,9 @@ import { MatSortModule } from '@angular/material/sort';
     MatIconModule,
     MatPaginatorModule,
     MatSortModule,
+    MatDialogModule,
+    MatTabsModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

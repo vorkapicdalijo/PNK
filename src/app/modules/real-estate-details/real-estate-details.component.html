@@ -1,1 +1,92 @@
-<p>nekretnina-detail works!</p>
+<div class="main w-75 d-flex flex-column justify-content-center mx-auto p-5">
+  <!-- MASTER -->
+  <div class="master w-100 p-5 mb-5 rounded-3">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <h2>{{realEstateDetailsMock.realEstateName}}</h2>
+      <div>
+        <button class="p-0 me-1 btn btn-info px-3"
+                  matTooltip="Uredi"
+                  (click)="editRealEstate(realEstateDetailsMock.id);">
+            <i class="las la-edit la-md"></i>
+          </button>
+          <button class="p-0 ms-1 btn btn-danger px-3"
+                  matTooltip="Izbriši"
+                  (click)="deleteRealEstate(realEstateDetailsMock.realEstateName);">
+            <i class="las la-trash-alt la-md"></i>
+          </button>
+      </div>
+    </div>
+    <div class="w-50">
+      <div class="row mb-2">
+        <div class="col">
+          <span>Vrsta nekretnine:</span>
+        </div>
+        <div class="col">
+          <span>{{realEstateDetailsMock.realEstateType.typeName}}</span>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col">
+          <span>Država:</span>
+        </div>
+        <div class="col">
+          <span>{{realEstateDetailsMock.realEstateCountry}}</span>
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col">
+          <span>Grad / mjesto:</span>
+        </div>
+        <div class="col">
+          <span>{{realEstateDetailsMock.realEstateCity}}</span>
+        </div>
+      </div>
+      <div class="row mt-5">
+        <div class="col">
+          <span>Cijena:</span>
+        </div>
+        <div class="col">
+          <span class="fw-bolder">{{realEstateDetailsMock.price + " €"}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /MASTER -->
+  <!-- DETAIL -->
+  <div class="detail w-100 p-5">
+    <h4 class="mb-5">SADRŽAJ</h4>
+
+    <div>
+      <mat-table [dataSource]="contentDataSource"
+              class="mat-elevation-z1 w-100">
+      <ng-container matColumnDef="no">
+        <mat-header-cell *matHeaderCellDef>
+          #
+        </mat-header-cell>
+        <mat-cell *matCellDef="let elementM let i = index">{{i+1}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="contentName">
+        <mat-header-cell *matHeaderCellDef>
+          NAZIV
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.contentName}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="quantity">
+        <mat-header-cell *matHeaderCellDef>
+          KOLIČINA
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.quantity}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <mat-header-cell *matHeaderCellDef>
+          OPIS
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.description}}</mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    </div>
+  </div>
+  <!-- DETAIL -->
+</div>
