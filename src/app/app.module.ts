@@ -26,7 +26,6 @@ import { AddRealEstateDialogComponent } from './modules/dialogs/add-real-estate-
 import {MatTabsModule} from '@angular/material/tabs';
 import { RealEstateCategoriesComponent } from './modules/real-estate-categories/real-estate-categories.component';
 import { MatSelectModule } from '@angular/material/select';
-import { RrrComponent } from './testovi/rrr/rrr.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +38,6 @@ import { RrrComponent } from './testovi/rrr/rrr.component';
     EditRealEstateDialogComponent,
     AddRealEstateDialogComponent,
     RealEstateCategoriesComponent,
-    RrrComponent,
 
   ],
   imports: [
