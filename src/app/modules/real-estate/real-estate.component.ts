@@ -9,6 +9,7 @@ import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog
 import { DeleteRealEstateDialogComponent } from '../dialogs/delete-real-estate-dialog/delete-real-estate-dialog.component';
 import { EditRealEstateDialogComponent } from '../dialogs/edit-real-estate-dialog/edit-real-estate-dialog.component';
 import { AddRealEstateDialogComponent } from '../dialogs/add-real-estate-dialog/add-real-estate-dialog.component';
+import { RealEstateDetails } from 'src/app/models/real-estate-details.model';
 
 
 @Component({
@@ -71,10 +72,12 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
       {
       })
 
-    dialogRef.afterClosed().subscribe((realEstate: RealEstate) => {
-      if(realEstate) {
+    dialogRef.afterClosed().subscribe((realEstateId: number) => {
+      console.log(realEstateId)
+      if(typeof(realEstateId)=='number') {
+        console.log(realEstateId)
         //navigiraj na novu nekretninu u details
-        this.router.navigate([`/real-estates/details/${realEstate.id}`])
+        this.router.navigate([`/real-estates/details/${realEstateId}`])
       }
     })
   }
@@ -87,9 +90,8 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
       })
 
     dialogRef.afterClosed().subscribe((updatedRealEstateId: number) => {
-      if(updatedRealEstateId) {
+      if(typeof(updatedRealEstateId)=='number') {
         //navigiraj na azuriranu nekretninu u details
-        console.log(updatedRealEstateId)
         this.router.navigate([`/real-estates/details/${updatedRealEstateId}`])
       }
     })
@@ -104,9 +106,10 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
        })
 
      dialogRef.afterClosed().subscribe(realEstateId => {
-       //if(result)
+      if(typeof(realEstateId)=='number') {
          //TODO: delete by id
         this.router.navigate([`/real-estates`])
+      }
      })
 
   }

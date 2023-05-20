@@ -3,12 +3,12 @@
 <hr class="mt-2 mb-3">
 <div mat-dialog-content>
   <form [formGroup]="editForm"
-        (ngSubmit)="onSubmit(editForm)"
-        class="p-5 pt-2 row">
+        (ngSubmit)="onSubmit()"
+        class="py-3 pt-2 row">
     <mat-form-field appearance="outline"
                     class="col">
       <mat-label>
-        Naziv nekretnine
+        Naziv sadržaja
       </mat-label>
       <input matInput
              formControlName="realEstateName">
@@ -46,7 +46,8 @@
              formControlName="realEstateCity">
     </mat-form-field>
   </form>
-  <form [formGroup]="contentEditForm">
+  <form [formGroup]="contentEditForm"
+        class="mb-4">
     <div class="mb-2 d-flex justify-content-between align-items-center">
       <h5>Uredi sadržaj</h5>
       <button class="p-0 me-1 btn btn-secondary px-3 py-1"
@@ -96,6 +97,7 @@
               </mat-label>
               <input matInput
                      type="number"
+                     min="1"
                      formControlName="quantity">
             </mat-form-field>
           </mat-cell>
@@ -164,7 +166,8 @@
   <button mat-raised-button
           class="btn btn-secondary"
           type="submit"
-          (click)="onSubmit(editForm)"
+          (click)="onSubmit()"
           [mat-dialog-close]="realEstateId"
-          cdkFocusInitial>Uredi</button>
+          cdkFocusInitial
+          [disabled]="!editForm.valid">Uredi</button>
 </div>

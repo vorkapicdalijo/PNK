@@ -7,3 +7,8 @@
     padding-right: 32px;
     text-align: center;
   }
+
+  .mat-row:hover {
+    background-color: #f2f2f2;
+    cursor: pointer;
+  }

@@ -67,6 +67,7 @@ export class RealEstateDetailsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((realEstateId: number) => {
       if(realEstateId) {
         //navigiraj na azuriranu nekretninu u details
+        this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.realEstateDetailsMock.content);
         this.router.navigate([`/real-estates/details/${realEstateId}`])
       }
     })

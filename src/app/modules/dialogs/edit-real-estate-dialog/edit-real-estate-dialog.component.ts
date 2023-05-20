@@ -62,11 +62,11 @@ export class EditRealEstateDialogComponent implements OnInit {
     this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.content);
 
     this.editForm = this.fb.group({
-      realEstateName: new FormControl(''),
-      realEstateCountry: new FormControl(''),
-      realEstateCity: new FormControl(''),
-      price: new FormControl(''),
-      realEstateTypeId: new FormControl('')
+      realEstateName: new FormControl('', Validators.required),
+      realEstateCountry: new FormControl('', Validators.required),
+      realEstateCity: new FormControl('', Validators.required),
+      price: new FormControl('', Validators.required),
+      realEstateTypeId: new FormControl('', Validators.required)
     })
 
     this.contentEditForm = this.fb.group({
@@ -92,6 +92,11 @@ export class EditRealEstateDialogComponent implements OnInit {
 
   editContent(contentId: number) {
     this.editingContent = true;
+    if(this.addingContent) {
+      this.content.shift();
+      this.contentDataSource = new MatTableDataSource(this.content);
+      this.addingContent = false;
+    }
 
     this.selectedContent = {... this.content.filter(el => {
       return el.contentId == contentId
@@ -109,12 +114,15 @@ export class EditRealEstateDialogComponent implements OnInit {
     this.addingContent = false;
 
     //TODO: save
-    for(let el of this.content) {
-      if(el.contentId == this.selectedContent.contentId) {
-        el = this.selectedContent;
+    for(let con of this.content) {
+      if(con.contentId == this.selectedContent.contentId) {
+        con.contentName = form.get('contentName')?.value;
+        con.quantity = form.get('quantity')?.value;
+        con.description = form.get('description')?.value;
         break
       }
     }
+    this.contentDataSource = new MatTableDataSource(this.content);
 
     this.selectedContent = {contentId: 0, contentName: '', description: '', quantity:0};
   }
@@ -150,8 +158,25 @@ export class EditRealEstateDialogComponent implements OnInit {
     this.contentEditForm.reset();
   }
 
-  onSubmit(form: FormGroup) {
-    console.log(form.value)
+  onSubmit() {
+    let type: RealEstateType = this.realEstateTypes.filter(type => {return type.realEstateTypeId == this.editForm.get('realEstateTypeId')?.value})[0];
+    //u obje forme pohranjeno - TODO posalji sa update na back
+    this.realEstateToEdit.realEstateName = this.editForm.get('realEstateName')?.value;
+    this.realEstateToEdit.realEstateCountry = this.editForm.get('realEstateCountry')?.value;
+    this.realEstateToEdit.realEstateCity = this.editForm.get('realEstateCity')?.value;
+    this.realEstateToEdit.realEstateType = {
+      realEstateTypeId: this.editForm.get('realEstateTypeId')?.value,
+      typeName: type.typeName,
+      description: type.description};
+    this.realEstateToEdit.price = this.editForm.get('price')?.value;
+    this.realEstateToEdit.content = this.content;
+
+    for(let el of this.realEstateService.realEstateDetailsMockData) {
+      if(el.id == this.realEstateToEdit.id) {
+        el = this.realEstateToEdit
+        break
+      }
+    }
   }
 
   cancelContent() {
