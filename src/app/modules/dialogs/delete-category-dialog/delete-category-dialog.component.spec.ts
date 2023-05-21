@@ -1,6 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DeleteCategoryDialogComponent } from './delete-category-dialog.component';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogModule,
+} from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material/table';
 
 describe('DeleteCategoryDialogComponent', () => {
   let component: DeleteCategoryDialogComponent;
@@ -8,7 +16,12 @@ describe('DeleteCategoryDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DeleteCategoryDialogComponent ]
+      declarations: [ DeleteCategoryDialogComponent ],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: MatDialogRef, useValue: {} },
+      ],
+      imports: [MatDialogModule, MatInputModule, MatTableModule, BrowserAnimationsModule],
     })
     .compileComponents();
   });

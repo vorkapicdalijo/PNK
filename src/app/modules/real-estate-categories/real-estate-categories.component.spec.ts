@@ -8,6 +8,15 @@ import {
 import { RealEstateService } from '../real-estate.service';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogModule,
+} from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 describe('RealEstateCategoriesComponent', () => {
   let component: RealEstateCategoriesComponent;
@@ -20,8 +29,16 @@ describe('RealEstateCategoriesComponent', () => {
         HttpClientTestingModule,
         BrowserAnimationsModule,
         MatTableModule,
+        MatDialogModule,
+        MatPaginatorModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatInputModule,
       ],
-      providers: [RealEstateService],
+      providers: [RealEstateService,
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: MatDialogRef, useValue: {} },
+      ],
     }).compileComponents();
   });
 
