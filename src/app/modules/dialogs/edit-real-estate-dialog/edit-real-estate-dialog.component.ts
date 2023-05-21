@@ -49,18 +49,6 @@ export class EditRealEstateDialogComponent implements OnInit {
               public fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.realEstateId = this.data.realEstateId;
-    //TODO: add fetch for real estate details to edit and for types
-    this.realEstateTypes = this.realEstateService.realEstateTypesMockData;
-
-    this.realEstateService.realEstateDetailsMockData.forEach(el => {
-      if (this.realEstateId == el.id)
-        this.realEstateToEdit = el;
-    })
-    if(this.realEstateToEdit)
-      this.content = this.realEstateToEdit.content;
-    this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.content);
-
     this.editForm = this.fb.group({
       realEstateName: new FormControl('', Validators.required),
       realEstateCountry: new FormControl('', Validators.required),
@@ -75,7 +63,25 @@ export class EditRealEstateDialogComponent implements OnInit {
       description: new FormControl('')
     })
 
-    this.setOldValues();
+
+    this.realEstateId = this.data.realEstateId;
+    //TODO: add fetch for real estate details to edit and for types
+    this.realEstateTypes = this.realEstateService.realEstateTypesMockData;
+
+    // this.realEstateService.realEstateDetailsMockData.forEach(el => {
+    //   if (this.realEstateId == el.id)
+    //     this.realEstateToEdit = el;
+    // })
+    this.realEstateService.getRealEstateById(this.realEstateId)
+          .subscribe(realEstate => {
+            this.realEstateToEdit = realEstate
+            if(this.realEstateToEdit)
+              this.content = this.realEstateToEdit.content
+            this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.content);
+            this.setOldValues();
+          });
+
+    //this.setOldValues();
   }
 
   setOldValues() {
@@ -166,17 +172,19 @@ export class EditRealEstateDialogComponent implements OnInit {
     this.realEstateToEdit.realEstateCity = this.editForm.get('realEstateCity')?.value;
     this.realEstateToEdit.realEstateType = {
       realEstateTypeId: this.editForm.get('realEstateTypeId')?.value,
-      typeName: type.typeName,
-      description: type.description};
+      typeName: type?.typeName,
+      description: type?.description};
     this.realEstateToEdit.price = this.editForm.get('price')?.value;
     this.realEstateToEdit.content = this.content;
 
-    for(let el of this.realEstateService.realEstateDetailsMockData) {
-      if(el.id == this.realEstateToEdit.id) {
-        el = this.realEstateToEdit
-        break
-      }
-    }
+    // for(let el of this.realEstateService.realEstateDetailsMockData) {
+    //   if(el.id == this.realEstateToEdit.id) {
+    //     el = this.realEstateToEdit
+    //     break
+    //   }
+    // }
+    this.realEstateService.updateRealEstate(this.realEstateToEdit)
+      .subscribe(res => {console.log(res)})
   }
 
   cancelContent() {

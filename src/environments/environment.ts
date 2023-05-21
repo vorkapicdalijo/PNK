@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'localhost:8080/pnk/api'
+  //apiUrl: 'localhost:8080/pnk/api',
+  apiUrl: 'https://pnk.onrender.com'
 };
 
 /*

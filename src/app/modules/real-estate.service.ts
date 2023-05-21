@@ -249,15 +249,22 @@ export class RealEstateService {
     return this.http.post<RealEstateDetails>(
       environment.apiUrl + '/real-estates/add',
       realEstate
-    ).pipe(map((res) => res as RealEstateDetails || null))
+    ).pipe(map((res) => res as any || null))
+  }
+
+  //TODO: dodaj backend
+  updateRealEstate(realEstate: RealEstateDetails): Observable<RealEstateDetails> {
+    return this.http.put<RealEstateDetails>(
+      environment.apiUrl + `/real-estates/update/${realEstate.id}`,
+      realEstate
+    ).pipe(map((res) => res as any || null))
   }
 
   //TODO: dodaj backend
   deleteRealEstate(realEstateId: number): Observable<RealEstateDetails> {
-    return this.http.post(
-      environment.apiUrl + '/real-estates/delete',
-      realEstateId
-    ).pipe(map((res) => res as RealEstateDetails || null))
+    return this.http.delete(
+      environment.apiUrl + `/real-estates/delete/${realEstateId}`
+    ).pipe(map((res) => res as any || null))
   }
 
   //TODO: dodaj backend

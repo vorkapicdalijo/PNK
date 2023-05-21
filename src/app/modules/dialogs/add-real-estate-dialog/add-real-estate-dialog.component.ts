@@ -182,7 +182,12 @@ export class AddRealEstateDialogComponent implements OnInit {
     this.realEstateToAdd.price = this.editForm.get('price')?.value;
     this.realEstateToAdd.content = this.content;
 
-    this.realEstateService.realEstateDetailsMockData.push(this.realEstateToAdd);
+    //this.realEstateService.realEstateDetailsMockData.push(this.realEstateToAdd);
+
+    this.realEstateService.addRealEstate(this.realEstateToAdd)
+      .subscribe(res => {
+        console.log(res)
+      })
   }
 
   cancelContent() {

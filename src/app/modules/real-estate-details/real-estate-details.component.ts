@@ -16,7 +16,7 @@ import { DeleteRealEstateDialogComponent } from '../dialogs/delete-real-estate-d
 export class RealEstateDetailsComponent implements OnInit {
 
   realEstateId: number = 0;
-  realEstate!: RealEstateDetails;
+  realEstateDetails!: RealEstateDetails;
   realEstateContent!: RealEstateContent[];
 
   displayedColumns = ['no', 'contentName', 'quantity', 'description']
@@ -36,17 +36,18 @@ export class RealEstateDetailsComponent implements OnInit {
       if(params['id']) {
         this.realEstateId = params['id']
 
-        this.realEstateService.realEstateDetailsMockData.forEach(el => {
-          if (el.id == this.realEstateId)
-              this.realEstateDetailsMock = el;
-        })
-        this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.realEstateDetailsMock.content);
+        // this.realEstateService.realEstateDetailsMockData.forEach(el => {
+        //   if (el.id == this.realEstateId)
+        //       this.realEstateDetailsMock = el;
+        // })
+        // this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.realEstateDetailsMock.content);
 
         //TODO: make api call for details, add backend
-        // this.realEstateService.getRealEstateById(this.realEstateId)
-        //   .subscribe(realEstate => {
-        //     this.realEstate = realEstate
-        //   });
+        this.realEstateService.getRealEstateById(this.realEstateId)
+          .subscribe(realEstate => {
+            this.realEstateDetails = realEstate
+            this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.realEstateDetails.content);
+          });
 
         // this.realEstateService.getContentByRealEstateId(this.realEstateId)
         //   .subscribe(content => {
@@ -67,7 +68,7 @@ export class RealEstateDetailsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((realEstateId: number) => {
       if(realEstateId) {
         //navigiraj na azuriranu nekretninu u details
-        this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.realEstateDetailsMock.content);
+        this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.realEstateDetails.content);
         this.router.navigate([`/real-estates/details/${realEstateId}`])
       }
     })

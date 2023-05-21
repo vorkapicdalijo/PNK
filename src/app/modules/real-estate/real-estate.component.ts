@@ -35,22 +35,26 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     if(this.paginator)
       this.paginator._intl.itemsPerPageLabel="Broj nekretnina po stranici:";
-   this.dataSource.paginator = this.paginator;
-   this.dataSource.sort = this.sort;
+    if(this.dataSource) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
   }
 
   ngOnInit(): void {
-    this.mockData = this.realEstateService.realEstateMockData;
+    //this.mockData = this.realEstateService.realEstateMockData;
     //dohvati sve nekretnine
-    // this.realEstateService.getRealEstates().subscribe((res) => {
-    //   this.realEstates = res;
-
-    //   this.dataSource = new MatTableDataSource<RealEstate>();
-    // });
+    this.realEstateService.getRealEstates().subscribe((res) => {
+      this.realEstates = res;
+      console.log(res)
+      this.dataSource = new MatTableDataSource<RealEstate>(this.realEstates);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    });
 
     //Mock data
-    this.realEstates = this.mockData;
-    this.dataSource = new MatTableDataSource(this.realEstates);
+    //this.realEstates = this.mockData;
+    //this.dataSource = new MatTableDataSource(this.realEstates);
   }
 
   openRealEstateDetails(realEstateId: number) {
@@ -78,7 +82,7 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
       if(typeof(realEstateId)=='number') {
         console.log(realEstateId)
         //navigiraj na novu nekretninu u details
-        this.router.navigate([`/real-estates/details/${realEstateId}`])
+        this.router.navigate([`/real-estates`])
       }
     })
   }
@@ -106,9 +110,11 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
          position: {top: '3rem'}
        })
 
-     dialogRef.afterClosed().subscribe(realEstateId => {
-      if(typeof(realEstateId)=='number') {
+     dialogRef.afterClosed().subscribe(closed => {
+      if(typeof(realEstate.id)=='number') {
          //TODO: delete by id
+         this.realEstateService.deleteRealEstate(realEstate.id)
+          .subscribe(res => {console.log(res)})
         this.router.navigate([`/real-estates`])
       }
      })

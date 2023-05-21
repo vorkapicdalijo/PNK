@@ -18,8 +18,12 @@ export class RealEstateCategoriesComponent implements OnInit {
   constructor(private realEstateService: RealEstateService) { }
 
   ngOnInit(): void {
-    this.realEstateCategories = this.realEstateService.realEstateTypesMockData;
-    this.dataSource = new MatTableDataSource<RealEstateType>(this.realEstateCategories);
+    //this.realEstateCategories = this.realEstateService.realEstateTypesMockData;
+    this.realEstateService.getRealEstateTypes()
+      .subscribe(res => {
+        this.realEstateCategories = res;
+        this.dataSource = new MatTableDataSource<RealEstateType>(this.realEstateCategories);
+      })
   }
 
 }
