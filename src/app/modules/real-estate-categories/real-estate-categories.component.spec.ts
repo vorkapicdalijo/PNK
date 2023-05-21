@@ -17,10 +17,12 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
 
 describe('RealEstateCategoriesComponent', () => {
   let component: RealEstateCategoriesComponent;
   let fixture: ComponentFixture<RealEstateCategoriesComponent>;
+  let mockRouter: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -38,6 +40,7 @@ describe('RealEstateCategoriesComponent', () => {
       providers: [RealEstateService,
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
+        { provide: Router, useValue: mockRouter }
       ],
     }).compileComponents();
   });

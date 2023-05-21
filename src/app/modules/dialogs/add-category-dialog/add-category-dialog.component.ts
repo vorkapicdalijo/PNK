@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RealEstateService } from '../../real-estate.service';
 import { RealEstateType } from 'src/app/models/real-estate-type.model';
+
+export interface DialogData {
+  categoryNames: String[];
+}
 
 @Component({
   selector: 'app-add-category-dialog',
@@ -17,8 +21,10 @@ import { RealEstateType } from 'src/app/models/real-estate-type.model';
 export class AddCategoryDialogComponent implements OnInit {
   form!: FormGroup;
 
+  categoryNameTaken: boolean = false;
+
   categoryToAdd: RealEstateType = {
-    realEstateTypeId: 0,
+    id: 0,
     typeName: '',
     description: '',
   };
@@ -26,7 +32,8 @@ export class AddCategoryDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddCategoryDialogComponent>,
     public fb: FormBuilder,
-    private realEstateService: RealEstateService
+    private realEstateService: RealEstateService,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +54,14 @@ export class AddCategoryDialogComponent implements OnInit {
 
     this.realEstateService.addRealEstateType(this.categoryToAdd)
       .subscribe(res => {
-        console.log(res)
+        console.log(res);
       })
+  }
+
+  nameInputChange() {
+    if(this.data.categoryNames.includes(this.form.get('categoryName')?.value.toLowerCase()))
+      this.categoryNameTaken = true;
+    else
+      this.categoryNameTaken = false;
   }
 }

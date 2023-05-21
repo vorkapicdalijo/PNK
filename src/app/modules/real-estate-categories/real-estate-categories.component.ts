@@ -8,21 +8,14 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DeleteCategoryDialogComponent } from '../dialogs/delete-category-dialog/delete-category-dialog.component';
 import { EditCategoryDialogComponent } from '../dialogs/edit-category-dialog/edit-category-dialog.component';
 import { AddCategoryDialogComponent } from '../dialogs/add-category-dialog/add-category-dialog.component';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-real-estate-categories',
   templateUrl: './real-estate-categories.component.html',
-  styleUrls: ['./real-estate-categories.component.css']
+  styleUrls: ['./real-estate-categories.component.css'],
 })
 export class RealEstateCategoriesComponent implements OnInit, AfterViewInit {
-
   realEstateCategories!: RealEstateType[];
   dataSource!: MatTableDataSource<RealEstateType>;
 
@@ -30,27 +23,37 @@ export class RealEstateCategoriesComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   displayedColumns = ['id', 'typeName', 'description', 'actions'];
 
-  constructor(private realEstateService: RealEstateService,
-              public dialog: MatDialog) { }
-
+  constructor(
+    private realEstateService: RealEstateService,
+    public dialog: MatDialog,
+    private router: Router
+  ) {}
 
   ngAfterViewInit(): void {
-    if(this.paginator)
-      this.paginator._intl.itemsPerPageLabel="Broj kategorija po stranici:";
-    if(this.dataSource) {
+    if (this.paginator)
+      this.paginator._intl.itemsPerPageLabel = 'Broj kategorija po stranici:';
+    if (this.dataSource) {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }
   }
 
   ngOnInit(): void {
-    this.realEstateCategories = this.realEstateService.realEstateTypesMockData;
-    this.dataSource = new MatTableDataSource<RealEstateType>(this.realEstateCategories);
-    // this.realEstateService.getRealEstateTypes()
-    //   .subscribe(res => {
-    //     this.realEstateCategories = res;
-    //     this.dataSource = new MatTableDataSource<RealEstateType>(this.realEstateCategories);
-    //   })
+    this.loadData();
+
+  }
+
+  loadData() {
+    this.dataSource = new MatTableDataSource<RealEstateType>([]);
+
+    this.realEstateService.getRealEstateTypes().subscribe((res) => {
+      this.realEstateCategories = res;
+      this.dataSource = new MatTableDataSource<RealEstateType>(
+        this.realEstateCategories
+      );
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    });
   }
 
   applyFilter(event: Event) {
@@ -63,50 +66,43 @@ export class RealEstateCategoriesComponent implements OnInit, AfterViewInit {
   }
 
   editType(type: RealEstateType) {
-    //TODO: add backend
-    const dialogRef = this.dialog.open(EditCategoryDialogComponent,
-      {
-        data: {category: type}
-      })
+    const dialogRef = this.dialog.open(EditCategoryDialogComponent, {
+      data: { category: type,
+              categoryNames: this.realEstateCategories.map(a => a.typeName.toLowerCase()).filter(el => el != type.typeName.toLowerCase()) },
+    });
 
-    dialogRef.afterClosed().subscribe(closed => {
-      this.realEstateCategories = this.realEstateService.realEstateTypesMockData;
-      this.dataSource = new MatTableDataSource<RealEstateType>(this.realEstateCategories);
-      if(this.dataSource) {
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+    dialogRef.afterClosed().subscribe((edited) => {
+      if(edited){
+        this.loadData();
+        this.router.navigate([`/real-estates/categories`]);
       }
-    })
-
+    });
   }
 
-  deleteType(type: RealEstateType)  {
-    //TODO: add backend
-
+  deleteType(type: RealEstateType) {
     const dialogRef = this.dialog.open(DeleteCategoryDialogComponent, {
-      data: {categoryName: type.typeName},
-      position: {top: '3rem'}
-    })
+      data: { categoryName: type.typeName, categoryId: type.id },
+      position: { top: '3rem' },
+    });
 
-   dialogRef.afterClosed().subscribe(closed => {
-      this.realEstateService.realEstateTypesMockData = this.realEstateService.realEstateTypesMockData.filter(el => {return el.realEstateTypeId != type.realEstateTypeId})
-      this.realEstateCategories = this.realEstateService.realEstateTypesMockData;
-      this.dataSource = new MatTableDataSource<RealEstateType>(this.realEstateCategories);
-      if(this.dataSource) {
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+    dialogRef.afterClosed().subscribe((deleted) => {
+      if (deleted == true) {
+          this.loadData();
+          this.router.navigate([`/real-estates/categories`]);
       }
-    })
+    });
   }
 
   addType() {
-    //TODO: add backend
+    const dialogRef = this.dialog.open(AddCategoryDialogComponent, {
+      data: {categoryNames: this.realEstateCategories.map(a => a.typeName.toLowerCase())}
+    });
 
-    const dialogRef = this.dialog.open(AddCategoryDialogComponent)
-
-   dialogRef.afterClosed().subscribe(closed => {
-
-   })
+    dialogRef.afterClosed().subscribe((added) => {
+      if(added==true){
+        this.loadData();
+        this.router.navigate([`/real-estates/categories`]);
+      }
+    });
   }
-
 }

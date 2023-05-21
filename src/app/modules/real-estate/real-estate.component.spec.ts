@@ -171,7 +171,7 @@ describe('RealEstateComponent', () => {
       { data: { realEstateId: realEstateId } }
     );
     expect(mockRouter.navigate).toHaveBeenCalledWith([
-      `/real-estates/details/${123}`,
+      `/real-estates`,
     ]);
   });
 
@@ -196,12 +196,9 @@ describe('RealEstateComponent', () => {
     expect(mockDialog.open).toHaveBeenCalledWith(
       DeleteRealEstateDialogComponent,
       {
-        data: { realEstateName: realEstate.realEstateName },
+        data: { realEstateName: realEstate.realEstateName, realEstateId: realEstate.id },
         position: { top: '3rem' },
       }
-    );
-    expect(mockRealEstateService.deleteRealEstate).toHaveBeenCalledWith(
-      realEstate.id
     );
     expect(mockRouter.navigate).toHaveBeenCalledWith([`/real-estates`]);
   });

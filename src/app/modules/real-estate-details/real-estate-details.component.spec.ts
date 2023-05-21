@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EditRealEstateDialogComponent } from '../dialogs/edit-real-estate-dialog/edit-real-estate-dialog.component';
 import { DeleteRealEstateDialogComponent } from '../dialogs/delete-real-estate-dialog/delete-real-estate-dialog.component';
 import { RealEstateDetails } from 'src/app/models/real-estate-details.model';
+import { MatTableModule } from '@angular/material/table';
 
 describe('RealEstateDetailsComponent', () => {
   let component: RealEstateDetailsComponent;
@@ -24,7 +25,7 @@ describe('RealEstateDetailsComponent', () => {
     realEstateCity: 'Mock City',
     realEstateType: {
       typeName: 'Mock Type',
-      realEstateTypeId: 0,
+      id: 0,
       description: 'des',
     },
     id: 123,
@@ -50,7 +51,7 @@ describe('RealEstateDetailsComponent', () => {
         { provide: EditRealEstateDialogComponent, useValue: {} },
         { provide: DeleteRealEstateDialogComponent, useValue: {} },
       ],
-      imports: [BrowserAnimationsModule],
+      imports: [BrowserAnimationsModule, MatTableModule],
     }).compileComponents();
   });
 
@@ -97,7 +98,7 @@ describe('RealEstateDetailsComponent', () => {
       component.realEstateDetails.content
     );
     expect(mockRouter.navigate).toHaveBeenCalledWith([
-      '/real-estates/details/456',
+      '/real-estates',
     ]);
   });
 

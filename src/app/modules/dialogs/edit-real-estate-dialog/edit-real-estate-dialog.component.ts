@@ -74,7 +74,7 @@ export class EditRealEstateDialogComponent implements OnInit {
       realEstateCountry: new FormControl('', Validators.required),
       realEstateCity: new FormControl('', Validators.required),
       price: new FormControl('', Validators.required),
-      realEstateTypeId: new FormControl('', Validators.required),
+      id: new FormControl('', Validators.required),
     });
 
     this.contentEditForm = this.fb.group({
@@ -104,12 +104,12 @@ export class EditRealEstateDialogComponent implements OnInit {
       realEstateName: this.realEstateToEdit?.realEstateName,
       realEstateCountry: this.realEstateToEdit?.realEstateCountry,
       realEstateCity: this.realEstateToEdit?.realEstateCity,
-      realEstateTypeId: this.realEstateToEdit?.realEstateType?.realEstateTypeId,
+      id: this.realEstateToEdit?.realEstateType?.id,
       price: this.realEstateToEdit?.price,
     });
 
     this.selectedTypeId =
-      this.realEstateToEdit?.realEstateType?.realEstateTypeId;
+      this.realEstateToEdit?.realEstateType?.id;
   }
 
   editContent(contentId: number) {
@@ -196,7 +196,7 @@ export class EditRealEstateDialogComponent implements OnInit {
   onSubmit() {
     let type: RealEstateType = this.realEstateTypes.filter((type) => {
       return (
-        type.realEstateTypeId == this.editForm.get('realEstateTypeId')?.value
+        type.id == this.editForm.get('id')?.value
       );
     })[0];
     //u obje forme pohranjeno - TODO posalji sa update na back
@@ -207,7 +207,7 @@ export class EditRealEstateDialogComponent implements OnInit {
     this.realEstateToEdit.realEstateCity =
       this.editForm.get('realEstateCity')?.value;
     this.realEstateToEdit.realEstateType = {
-      realEstateTypeId: this.editForm.get('realEstateTypeId')?.value,
+      id: this.editForm.get('id')?.value,
       typeName: type?.typeName,
       description: type?.description,
     };

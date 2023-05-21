@@ -11,6 +11,7 @@ import { RealEstateType } from 'src/app/models/real-estate-type.model';
 
 export interface DialogData {
   category: RealEstateType;
+  categoryNames: String[];
 }
 
 @Component({
@@ -20,7 +21,7 @@ export interface DialogData {
 })
 export class EditCategoryDialogComponent implements OnInit {
   categoryToEdit!: RealEstateType;
-
+  categoryNameTaken: boolean = false;
   editForm!: FormGroup;
 
   constructor(
@@ -44,7 +45,7 @@ export class EditCategoryDialogComponent implements OnInit {
 
   setValues() {
     this.editForm.patchValue({
-      categoryId: this.categoryToEdit?.realEstateTypeId,
+      categoryId: this.categoryToEdit?.id,
       categoryName: this.categoryToEdit?.typeName,
       description: this.categoryToEdit?.description,
     });
@@ -55,20 +56,19 @@ export class EditCategoryDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    //TODO: add backend call
-
     this.categoryToEdit.typeName = this.editForm.get('categoryName')?.value;
     this.categoryToEdit.description = this.editForm.get('description')?.value;
 
-    // for (let el of this.realEstateService.realEstateTypesMockData) {
-    //   if (el.realEstateTypeId == this.categoryToEdit.realEstateTypeId) {
-    //     el = { ...this.categoryToEdit };
-    //     break;
-    //   }
-    // }
     this.realEstateService.updateRealEstateType(this.categoryToEdit)
       .subscribe(res => {
         console.log(res)
       })
+  }
+
+  nameInputChange() {
+    if(this.data.categoryNames.includes(this.editForm.get('categoryName')?.value.toLowerCase()))
+      this.categoryNameTaken = true;
+    else
+      this.categoryNameTaken = false;
   }
 }

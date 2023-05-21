@@ -5,5 +5,5 @@
 </div>
 <div mat-dialog-actions class="d-flex justify-content-center">
   <button mat-raised-button (click)="onNoClick()">Odustani</button>
-  <button mat-raised-button color="warn" [mat-dialog-close]="true" cdkFocusInitial>Obriši</button>
+  <button mat-raised-button color="warn" [mat-dialog-close]="true" (click)="deleteCategory()" cdkFocusInitial>Obriši</button>
 </div>

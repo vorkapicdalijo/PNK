@@ -39,12 +39,13 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
   constructor(
     private realEstateService: RealEstateService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
   ) {}
 
   ngAfterViewInit(): void {
     if (this.paginator)
       this.paginator._intl.itemsPerPageLabel = 'Broj nekretnina po stranici:';
+
     if (this.dataSource) {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -52,20 +53,20 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData() {
     this.dataSource = new MatTableDataSource<RealEstate>([]);
-    //this.mockData = this.realEstateService.realEstateMockData;
-    //dohvati sve nekretnine
+    //ucitaj nekretnine
     this.realEstateService.getRealEstates()?.subscribe((res) => {
       this.realEstates = res;
-      console.log(res);
-      this.dataSource = new MatTableDataSource<RealEstate>(this.realEstates);
+      this.dataSource = new MatTableDataSource<RealEstate>(
+        this.realEstates.reverse()
+      );
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
-
-    //Mock data
-    //this.realEstates = this.mockData;
-    //this.dataSource = new MatTableDataSource(this.realEstates);
   }
 
   openRealEstateDetails(realEstateId: number) {
@@ -74,54 +75,46 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    if(this.dataSource) {
+    if (this.dataSource) {
       this.dataSource.filter = filterValue.trim().toLowerCase();
       this.dataSource.paginator?.firstPage();
     }
   }
 
-  //TODO modali?
   addRealEstate() {
-    //TODO: add service add
     const dialogRef = this.dialog.open(AddRealEstateDialogComponent, {});
 
-    dialogRef.afterClosed().subscribe((realEstateId: number) => {
-      if (typeof realEstateId == 'number') {
-        //navigiraj na novu nekretninu u details
+    dialogRef.afterClosed().subscribe((added: number) => {
+      if(added) {
+        this.loadData();
         this.router.navigate([`/real-estates`]);
       }
     });
   }
 
   editRealEstate(realEstateId: number) {
-    //TODO: add service edit
     const dialogRef = this.dialog.open(EditRealEstateDialogComponent, {
       data: { realEstateId: realEstateId },
     });
 
-    dialogRef.afterClosed().subscribe((updatedRealEstateId: number) => {
-      if (typeof updatedRealEstateId == 'number') {
-        //navigiraj na azuriranu nekretninu u details
-        this.router.navigate([`/real-estates/details/${updatedRealEstateId}`]);
+    dialogRef.afterClosed().subscribe((edited: number) => {
+      if(edited) {
+        this.loadData();
+        this.router.navigate([`/real-estates`]);
       }
     });
   }
 
   deleteRealEstate(realEstate: RealEstate) {
-    //TODO: add service delete
     const dialogRef = this.dialog.open(DeleteRealEstateDialogComponent, {
-      data: { realEstateName: realEstate.realEstateName },
+      data: { realEstateName: realEstate.realEstateName,
+              realEstateId: realEstate.id },
       position: { top: '3rem' },
     });
 
-    dialogRef.afterClosed().subscribe((closed) => {
-      if (typeof realEstate.id == 'number') {
-        //TODO: delete by id
-        this.realEstateService
-          .deleteRealEstate(realEstate.id)
-          .subscribe((res) => {
-            console.log(res);
-          });
+    dialogRef.afterClosed().subscribe((deleted) => {
+      if(deleted) {
+        this.loadData();
         this.router.navigate([`/real-estates`]);
       }
     });

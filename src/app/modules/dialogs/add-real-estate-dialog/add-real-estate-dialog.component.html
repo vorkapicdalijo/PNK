@@ -16,8 +16,8 @@
     <mat-form-field appearance="outline"
                     class="col">
       <mat-label>Kategorija</mat-label>
-      <mat-select formControlName="realEstateTypeId">
-        <mat-option [value]="type.realEstateTypeId"
+      <mat-select formControlName="id">
+        <mat-option [value]="type.id"
                     *ngFor="let type of realEstateTypes">{{ type.typeName }}</mat-option>
       </mat-select>
     </mat-form-field>
@@ -78,7 +78,7 @@
                             class="mt-3 w-75 p-0"
                             *ngIf="editingContent && selectedContent.contentId==element.contentId">
               <mat-label>
-                Naziv nekretnine
+                Naziv sadržaja
               </mat-label>
               <input matInput
                      formControlName="contentName">
@@ -169,7 +169,7 @@
           class="btn btn-secondary"
           type="submit"
           (click)="onSubmit()"
-          [mat-dialog-close]="realEstateToAdd.id"
+          [mat-dialog-close]="true"
           cdkFocusInitial
           [disabled]="!editForm.valid">Dodaj</button>
 </div>

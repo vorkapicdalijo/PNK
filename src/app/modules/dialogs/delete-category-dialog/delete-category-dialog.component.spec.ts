@@ -9,6 +9,7 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('DeleteCategoryDialogComponent', () => {
   let component: DeleteCategoryDialogComponent;
@@ -21,7 +22,7 @@ describe('DeleteCategoryDialogComponent', () => {
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
       ],
-      imports: [MatDialogModule, MatInputModule, MatTableModule, BrowserAnimationsModule],
+      imports: [MatDialogModule, MatInputModule, MatTableModule, BrowserAnimationsModule, HttpClientTestingModule],
     })
     .compileComponents();
   });

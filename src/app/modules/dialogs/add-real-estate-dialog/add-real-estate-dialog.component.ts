@@ -25,7 +25,7 @@ export class AddRealEstateDialogComponent implements OnInit {
     realEstateCity: '',
     realEstateCountry: '',
     realEstateName: '',
-    realEstateType: { description: '', realEstateTypeId: 0, typeName: '' },
+    realEstateType: { description: '', id: 0, typeName: '' },
   };
 
   realEstateTypes!: RealEstateType[];
@@ -59,8 +59,6 @@ export class AddRealEstateDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //TODO: add fetch for real estate details to edit and for types
-    //this.realEstateTypes = this.realEstateService.realEstateTypesMockData;
     this.realEstateService.getRealEstateTypes().subscribe(types => {
       this.realEstateTypes = types;
     })
@@ -70,7 +68,7 @@ export class AddRealEstateDialogComponent implements OnInit {
       realEstateCountry: new FormControl('', Validators.required),
       realEstateCity: new FormControl('', Validators.required),
       price: new FormControl('', Validators.required),
-      realEstateTypeId: new FormControl('', Validators.required),
+      id: new FormControl('', Validators.required),
     });
 
     this.contentEditForm = this.fb.group({
@@ -167,10 +165,9 @@ export class AddRealEstateDialogComponent implements OnInit {
   onSubmit() {
     let type: RealEstateType = this.realEstateTypes.filter((type) => {
       return (
-        type.realEstateTypeId == this.editForm.get('realEstateTypeId')?.value
+        type.id == this.editForm.get('id')?.value
       );
     })[0];
-    //u obje forme pohranjeno - TODO posalji sa update na back
     this.realEstateToAdd.realEstateName =
       this.editForm.get('realEstateName')?.value;
     this.realEstateToAdd.realEstateCountry =
@@ -178,14 +175,12 @@ export class AddRealEstateDialogComponent implements OnInit {
     this.realEstateToAdd.realEstateCity =
       this.editForm.get('realEstateCity')?.value;
     this.realEstateToAdd.realEstateType = {
-      realEstateTypeId: this.editForm.get('realEstateTypeId')?.value,
+      id: this.editForm.get('id')?.value,
       typeName: type.typeName,
       description: type.description,
     };
     this.realEstateToAdd.price = this.editForm.get('price')?.value;
     this.realEstateToAdd.content = this.content;
-
-    //this.realEstateService.realEstateDetailsMockData.push(this.realEstateToAdd);
 
     this.realEstateService
       .addRealEstate(this.realEstateToAdd)

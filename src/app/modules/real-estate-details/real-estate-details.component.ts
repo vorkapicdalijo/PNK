@@ -36,13 +36,6 @@ export class RealEstateDetailsComponent implements OnInit {
       if (params['id']) {
         this.realEstateId = params['id'];
 
-        // this.realEstateService.realEstateDetailsMockData.forEach(el => {
-        //   if (el.id == this.realEstateId)
-        //       this.realEstateDetailsMock = el;
-        // })
-        // this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.realEstateDetailsMock.content);
-
-        //TODO: make api call for details, add backend
         this.realEstateService
           .getRealEstateById(this.realEstateId)
           .subscribe((realEstate) => {
@@ -52,41 +45,32 @@ export class RealEstateDetailsComponent implements OnInit {
             );
           });
 
-        // this.realEstateService.getContentByRealEstateId(this.realEstateId)
-        //   .subscribe(content => {
-        //     this.realEstateContent = content
-        //   })
       }
     });
   }
 
   editRealEstate(realEstateId: number) {
-    //TODO: add service edit
     const dialogRef = this.dialog.open(EditRealEstateDialogComponent, {
       data: { realEstateId: realEstateId },
     });
 
     dialogRef.afterClosed().subscribe((realEstateId: number) => {
       if (realEstateId) {
-        //navigiraj na azuriranu nekretninu u details
         this.contentDataSource = new MatTableDataSource<RealEstateContent>(
           this.realEstateDetails.content
         );
-        this.router.navigate([`/real-estates/details/${realEstateId}`]);
+        this.router.navigate([`/real-estates`]);
       }
     });
   }
 
   deleteRealEstate(realEstate: RealEstateDetails) {
-    //TODO: add service delete
     const dialogRef = this.dialog.open(DeleteRealEstateDialogComponent, {
       data: { realEstateName: realEstate.realEstateName },
       position: { top: '3rem' },
     });
 
     dialogRef.afterClosed().subscribe((realEstateId) => {
-      //if(result)
-      //TODO: delete by id
       this.realEstateService
         .deleteRealEstate(realEstate.id)
         .subscribe((res) => {
