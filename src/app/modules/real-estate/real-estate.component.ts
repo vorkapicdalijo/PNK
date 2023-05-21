@@ -52,9 +52,10 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.dataSource = new MatTableDataSource<RealEstate>([]);
     //this.mockData = this.realEstateService.realEstateMockData;
     //dohvati sve nekretnine
-    this.realEstateService.getRealEstates().subscribe((res) => {
+    this.realEstateService.getRealEstates()?.subscribe((res) => {
       this.realEstates = res;
       console.log(res);
       this.dataSource = new MatTableDataSource<RealEstate>(this.realEstates);
@@ -73,10 +74,9 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+    if(this.dataSource) {
+      this.dataSource.filter = filterValue.trim().toLowerCase();
+      this.dataSource.paginator?.firstPage();
     }
   }
 
