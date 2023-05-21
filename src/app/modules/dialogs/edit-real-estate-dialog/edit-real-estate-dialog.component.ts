@@ -57,8 +57,8 @@ export class EditRealEstateDialogComponent implements OnInit {
       if (this.realEstateId == el.id)
         this.realEstateToEdit = el;
     })
-
-    this.content = this.realEstateToEdit.content;
+    if(this.realEstateToEdit)
+      this.content = this.realEstateToEdit.content;
     this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.content);
 
     this.editForm = this.fb.group({
@@ -79,15 +79,15 @@ export class EditRealEstateDialogComponent implements OnInit {
   }
 
   setOldValues() {
-    this.editForm.setValue({
-      realEstateName: this.realEstateToEdit.realEstateName,
-      realEstateCountry: this.realEstateToEdit.realEstateCountry,
-      realEstateCity: this.realEstateToEdit.realEstateCity,
-      realEstateTypeId: this.realEstateToEdit.realEstateType.realEstateTypeId,
-      price: this.realEstateToEdit.price
+    this.editForm.patchValue({
+      realEstateName: this.realEstateToEdit?.realEstateName,
+      realEstateCountry: this.realEstateToEdit?.realEstateCountry,
+      realEstateCity: this.realEstateToEdit?.realEstateCity,
+      realEstateTypeId: this.realEstateToEdit?.realEstateType?.realEstateTypeId,
+      price: this.realEstateToEdit?.price
     })
 
-    this.selectedTypeId = this.realEstateToEdit.realEstateType.realEstateTypeId;
+    this.selectedTypeId = this.realEstateToEdit?.realEstateType?.realEstateTypeId;
   }
 
   editContent(contentId: number) {

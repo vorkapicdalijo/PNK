@@ -2,7 +2,7 @@
   <!-- MASTER -->
   <div class="master w-100 p-5 mb-5 rounded-3">
     <div class="d-flex justify-content-between align-items-center mb-5">
-      <h2>{{realEstateDetailsMock.realEstateName}}</h2>
+      <h2>{{realEstateDetailsMock?.realEstateName}}</h2>
       <div>
         <button class="p-0 me-1 btn btn-info px-3"
                   matTooltip="Uredi"
@@ -11,7 +11,7 @@
           </button>
           <button class="p-0 ms-1 btn btn-danger px-3"
                   matTooltip="Izbriši"
-                  (click)="deleteRealEstate(realEstateDetailsMock.realEstateName);">
+                  (click)="deleteRealEstate(realEstateDetailsMock?.realEstateName);">
             <i class="las la-trash-alt la-md"></i>
           </button>
       </div>
@@ -22,7 +22,7 @@
           <span>Vrsta nekretnine:</span>
         </div>
         <div class="col">
-          <span>{{realEstateDetailsMock.realEstateType.typeName}}</span>
+          <span>{{realEstateDetailsMock?.realEstateType?.typeName}}</span>
         </div>
       </div>
       <div class="row mb-2">
@@ -30,7 +30,7 @@
           <span>Država:</span>
         </div>
         <div class="col">
-          <span>{{realEstateDetailsMock.realEstateCountry}}</span>
+          <span>{{realEstateDetailsMock?.realEstateCountry}}</span>
         </div>
       </div>
       <div class="row mb-4">
@@ -38,7 +38,7 @@
           <span>Grad / mjesto:</span>
         </div>
         <div class="col">
-          <span>{{realEstateDetailsMock.realEstateCity}}</span>
+          <span>{{realEstateDetailsMock?.realEstateCity}}</span>
         </div>
       </div>
       <div class="row mt-5">
@@ -46,7 +46,7 @@
           <span>Cijena:</span>
         </div>
         <div class="col">
-          <span class="fw-bolder">{{realEstateDetailsMock.price + " €"}}</span>
+          <span class="fw-bolder">{{realEstateDetailsMock?.price + " €"}}</span>
         </div>
       </div>
     </div>

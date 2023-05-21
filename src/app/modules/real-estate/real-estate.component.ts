@@ -33,7 +33,8 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
 
 
   ngAfterViewInit(): void {
-   this.paginator._intl.itemsPerPageLabel="Broj nekretnina po stranici:";
+    if(this.paginator)
+      this.paginator._intl.itemsPerPageLabel="Broj nekretnina po stranici:";
    this.dataSource.paginator = this.paginator;
    this.dataSource.sort = this.sort;
   }

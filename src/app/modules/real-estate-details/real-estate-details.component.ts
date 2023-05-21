@@ -38,7 +38,7 @@ export class RealEstateDetailsComponent implements OnInit {
 
         this.realEstateService.realEstateDetailsMockData.forEach(el => {
           if (el.id == this.realEstateId)
-            this.realEstateDetailsMock = el;
+              this.realEstateDetailsMock = el;
         })
         this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.realEstateDetailsMock.content);
 
