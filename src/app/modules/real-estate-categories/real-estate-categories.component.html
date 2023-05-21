@@ -1,30 +1,73 @@
-<div class="container-lg py-5">
-  <div class="cat w-75 px-5 py-4 mx-auto mb-3 rounded-3">
-    <h4 class="text-center m-0">ŠIFRANIK KATEGORIJA NEKRETNINA</h4>
+<div class="container-lg py-5 d-flex flex-column align-items-center">
+  <!-- forma - filter i search -->
+  <div style="background-color:#f2f2f2;"
+       class="bg-white w-50 mb-4">
+    <mat-form-field appearance="outline"
+                    class="w-100">
+      <mat-label>Pretraži kategorije</mat-label>
+      <input matInput
+             placeholder="Element pretrage"
+             (keyup)="applyFilter($event)"
+             #input>
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
   </div>
-  <div class="cat w-75 p-5 mx-auto">
+
+  <div class="d-flex justify-content-between w-75 mb-3">
+    <button mat-raised-button
+            class="btn btn-secondary py-1"
+            (click)="addType()">
+      <i class="las la-list-ul la-md me-2"></i>
+      <span>Dodaj kategoriju</span>
+    </button>
+  </div>
+  <div class="w-75 mat-elevation-z8">
     <mat-table [dataSource]="dataSource"
-               class="mat-elevation-z2 w-100">
+               class="mat-elevation-z8 w-100"
+               matSort>
       <ng-container matColumnDef="id">
-        <mat-header-cell *matHeaderCellDef>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
           ŠIFRA
         </mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.realEstateTypeId}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="typeName">
-        <mat-header-cell *matHeaderCellDef>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
           NAZIV
         </mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.typeName}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="description">
-        <mat-header-cell *matHeaderCellDef>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
           OPIS
         </mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.description}}</mat-cell>
       </ng-container>
+      <ng-container matColumnDef="actions"
+                    justify="end">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let element"
+                  class="float-end">
+          <button class="p-0 me-1 btn btn-info px-3"
+                  matTooltip="Uredi"
+                  (click)="editType(element); $event.stopPropagation()">
+            <i class="las la-edit la-md"></i>
+          </button>
+          <button class="p-0 ms-1 btn btn-danger px-3"
+                  matTooltip="Izbriši"
+                  (click)="deleteType(element); $event.stopPropagation()">
+            <i class="las la-trash-alt la-md"></i>
+          </button>
+        </mat-cell>
+      </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      <!-- <mat-row *matNoDataRow>
+        <mat-cell>No data matching the filter</mat-cell>
+      </mat-row> -->
     </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"
+                   class="w-100"
+                   showFirstLastButtons></mat-paginator>
   </div>
 </div>

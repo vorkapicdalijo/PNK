@@ -253,7 +253,7 @@ export class RealEstateService {
   }
 
   //TODO: dodaj backend
-  updateRealEstate(realEstate: RealEstateDetails): Observable<RealEstateDetails> {
+  updateRealEstate(realEstate: RealEstateDetails): Observable<any> {
     return this.http.put<RealEstateDetails>(
       environment.apiUrl + `/real-estates/update/${realEstate.id}`,
       realEstate
@@ -261,7 +261,7 @@ export class RealEstateService {
   }
 
   //TODO: dodaj backend
-  deleteRealEstate(realEstateId: number): Observable<RealEstateDetails> {
+  deleteRealEstate(realEstateId: number): Observable<any> {
     return this.http.delete(
       environment.apiUrl + `/real-estates/delete/${realEstateId}`
     ).pipe(map((res) => res as any || null))
@@ -272,6 +272,29 @@ export class RealEstateService {
     return this.http.get<RealEstateType[]>(
       environment.apiUrl + '/real-estates/types'
     ).pipe(map((res) => res as RealEstateType[] || null))
+  }
+
+  //TODO: dodaj backend
+  addRealEstateType(type: RealEstateType): Observable<RealEstateType> {
+    return this.http.post<RealEstateType>(
+      environment.apiUrl + '/real-estates/types/add',
+      type
+    ).pipe(map((res) => res as any || null))
+  }
+
+  //TODO: dodaj backend
+  updateRealEstateType(type: RealEstateType): Observable<any> {
+    return this.http.put<RealEstateType>(
+      environment.apiUrl + `/real-estates/types/update/${type.realEstateTypeId}`,
+      type
+    ).pipe(map((res) => res as any || null))
+  }
+
+  //TODO: dodaj backend
+  deleteRealEstateType(typeId: number): Observable<any> {
+    return this.http.delete(
+      environment.apiUrl + `/real-estates/types/delete/${typeId}`
+    ).pipe(map((res) => res as any || null))
   }
 
   //TODO: backend

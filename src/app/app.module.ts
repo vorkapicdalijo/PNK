@@ -26,6 +26,9 @@ import { AddRealEstateDialogComponent } from './modules/dialogs/add-real-estate-
 import {MatTabsModule} from '@angular/material/tabs';
 import { RealEstateCategoriesComponent } from './modules/real-estate-categories/real-estate-categories.component';
 import { MatSelectModule } from '@angular/material/select';
+import { AddCategoryDialogComponent } from './modules/dialogs/add-category-dialog/add-category-dialog.component';
+import { EditCategoryDialogComponent } from './modules/dialogs/edit-category-dialog/edit-category-dialog.component';
+import { DeleteCategoryDialogComponent } from './modules/dialogs/delete-category-dialog/delete-category-dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,9 @@ import { MatSelectModule } from '@angular/material/select';
     EditRealEstateDialogComponent,
     AddRealEstateDialogComponent,
     RealEstateCategoriesComponent,
+    AddCategoryDialogComponent,
+    EditCategoryDialogComponent,
+    DeleteCategoryDialogComponent,
 
   ],
   imports: [

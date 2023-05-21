@@ -5,3 +5,9 @@
 .cat {
   background-color: #f0f5f5;
 }
+
+
+.mat-cell:last-child, .mat-header-cell:last-child {
+  justify-content: flex-end;
+}
+

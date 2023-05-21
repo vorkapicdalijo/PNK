@@ -5,12 +5,15 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
-import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { DeleteRealEstateDialogComponent } from '../dialogs/delete-real-estate-dialog/delete-real-estate-dialog.component';
 import { EditRealEstateDialogComponent } from '../dialogs/edit-real-estate-dialog/edit-real-estate-dialog.component';
 import { AddRealEstateDialogComponent } from '../dialogs/add-real-estate-dialog/add-real-estate-dialog.component';
 import { RealEstateDetails } from 'src/app/models/real-estate-details.model';
-
 
 @Component({
   selector: 'app-real-estate',
@@ -23,19 +26,26 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  displayedColumns = ['realEstateName', 'realEstateType', 'realEstateLocation', 'price', 'actions'];
+  displayedColumns = [
+    'realEstateName',
+    'realEstateType',
+    'realEstateLocation',
+    'price',
+    'actions',
+  ];
 
   mockData: RealEstate[] = [];
 
-  constructor(private realEstateService: RealEstateService,
-              private router: Router,
-              public dialog: MatDialog) {}
-
+  constructor(
+    private realEstateService: RealEstateService,
+    private router: Router,
+    public dialog: MatDialog
+  ) {}
 
   ngAfterViewInit(): void {
-    if(this.paginator)
-      this.paginator._intl.itemsPerPageLabel="Broj nekretnina po stranici:";
-    if(this.dataSource) {
+    if (this.paginator)
+      this.paginator._intl.itemsPerPageLabel = 'Broj nekretnina po stranici:';
+    if (this.dataSource) {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }
@@ -46,7 +56,7 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
     //dohvati sve nekretnine
     this.realEstateService.getRealEstates().subscribe((res) => {
       this.realEstates = res;
-      console.log(res)
+      console.log(res);
       this.dataSource = new MatTableDataSource<RealEstate>(this.realEstates);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -58,7 +68,7 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
   }
 
   openRealEstateDetails(realEstateId: number) {
-    this.router.navigate([`/real-estates/details/${realEstateId}`])
+    this.router.navigate([`/real-estates/details/${realEstateId}`]);
   }
 
   applyFilter(event: Event) {
@@ -73,51 +83,47 @@ export class RealEstateComponent implements OnInit, AfterViewInit {
   //TODO modali?
   addRealEstate() {
     //TODO: add service add
-    const dialogRef = this.dialog.open(AddRealEstateDialogComponent,
-      {
-      })
+    const dialogRef = this.dialog.open(AddRealEstateDialogComponent, {});
 
     dialogRef.afterClosed().subscribe((realEstateId: number) => {
-      console.log(realEstateId)
-      if(typeof(realEstateId)=='number') {
-        console.log(realEstateId)
+      if (typeof realEstateId == 'number') {
         //navigiraj na novu nekretninu u details
-        this.router.navigate([`/real-estates`])
+        this.router.navigate([`/real-estates`]);
       }
-    })
+    });
   }
 
   editRealEstate(realEstateId: number) {
     //TODO: add service edit
-    const dialogRef = this.dialog.open(EditRealEstateDialogComponent,
-      {
-        data: {realEstateId: realEstateId},
-      })
+    const dialogRef = this.dialog.open(EditRealEstateDialogComponent, {
+      data: { realEstateId: realEstateId },
+    });
 
     dialogRef.afterClosed().subscribe((updatedRealEstateId: number) => {
-      if(typeof(updatedRealEstateId)=='number') {
+      if (typeof updatedRealEstateId == 'number') {
         //navigiraj na azuriranu nekretninu u details
-        this.router.navigate([`/real-estates/details/${updatedRealEstateId}`])
+        this.router.navigate([`/real-estates/details/${updatedRealEstateId}`]);
       }
-    })
+    });
   }
 
   deleteRealEstate(realEstate: RealEstate) {
-     //TODO: add service delete
-     const dialogRef = this.dialog.open(DeleteRealEstateDialogComponent,
-       {
-         data: {realEstateName: realEstate.realEstateName},
-         position: {top: '3rem'}
-       })
+    //TODO: add service delete
+    const dialogRef = this.dialog.open(DeleteRealEstateDialogComponent, {
+      data: { realEstateName: realEstate.realEstateName },
+      position: { top: '3rem' },
+    });
 
-     dialogRef.afterClosed().subscribe(closed => {
-      if(typeof(realEstate.id)=='number') {
-         //TODO: delete by id
-         this.realEstateService.deleteRealEstate(realEstate.id)
-          .subscribe(res => {console.log(res)})
-        this.router.navigate([`/real-estates`])
+    dialogRef.afterClosed().subscribe((closed) => {
+      if (typeof realEstate.id == 'number') {
+        //TODO: delete by id
+        this.realEstateService
+          .deleteRealEstate(realEstate.id)
+          .subscribe((res) => {
+            console.log(res);
+          });
+        this.router.navigate([`/real-estates`]);
       }
-     })
-
+    });
   }
 }

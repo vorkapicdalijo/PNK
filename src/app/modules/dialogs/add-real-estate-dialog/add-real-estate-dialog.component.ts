@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { RealEstateType } from 'src/app/models/real-estate-type.model';
 import { RealEstateService } from '../../real-estate.service';
 import {
@@ -25,8 +25,8 @@ export class AddRealEstateDialogComponent implements OnInit {
     realEstateCity: '',
     realEstateCountry: '',
     realEstateName: '',
-    realEstateType: {description: '', realEstateTypeId: 0, typeName: ''},
-  }
+    realEstateType: { description: '', realEstateTypeId: 0, typeName: '' },
+  };
 
   realEstateTypes!: RealEstateType[];
 
@@ -60,7 +60,10 @@ export class AddRealEstateDialogComponent implements OnInit {
 
   ngOnInit(): void {
     //TODO: add fetch for real estate details to edit and for types
-    this.realEstateTypes = this.realEstateService.realEstateTypesMockData;
+    //this.realEstateTypes = this.realEstateService.realEstateTypesMockData;
+    this.realEstateService.getRealEstateTypes().subscribe(types => {
+      this.realEstateTypes = types;
+    })
 
     this.editForm = this.fb.group({
       realEstateName: new FormControl('', Validators.required),
@@ -184,10 +187,11 @@ export class AddRealEstateDialogComponent implements OnInit {
 
     //this.realEstateService.realEstateDetailsMockData.push(this.realEstateToAdd);
 
-    this.realEstateService.addRealEstate(this.realEstateToAdd)
-      .subscribe(res => {
-        console.log(res)
-      })
+    this.realEstateService
+      .addRealEstate(this.realEstateToAdd)
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 
   cancelContent() {

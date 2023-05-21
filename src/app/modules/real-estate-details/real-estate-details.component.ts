@@ -11,30 +11,30 @@ import { DeleteRealEstateDialogComponent } from '../dialogs/delete-real-estate-d
 @Component({
   selector: 'app-real-estate-details',
   templateUrl: './real-estate-details.component.html',
-  styleUrls: ['./real-estate-details.component.css']
+  styleUrls: ['./real-estate-details.component.css'],
 })
 export class RealEstateDetailsComponent implements OnInit {
-
   realEstateId: number = 0;
   realEstateDetails!: RealEstateDetails;
   realEstateContent!: RealEstateContent[];
 
-  displayedColumns = ['no', 'contentName', 'quantity', 'description']
+  displayedColumns = ['no', 'contentName', 'quantity', 'description'];
 
   contentDataSource!: MatTableDataSource<RealEstateContent>;
 
   realEstateDetailsMock!: RealEstateDetails;
 
-  constructor(private realEstateService: RealEstateService,
-              private route: ActivatedRoute,
-              private router: Router,
-              public dialog: MatDialog) { }
+  constructor(
+    private realEstateService: RealEstateService,
+    private route: ActivatedRoute,
+    private router: Router,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
-
-    this.route.params.subscribe(params => {
-      if(params['id']) {
-        this.realEstateId = params['id']
+    this.route.params.subscribe((params) => {
+      if (params['id']) {
+        this.realEstateId = params['id'];
 
         // this.realEstateService.realEstateDetailsMockData.forEach(el => {
         //   if (el.id == this.realEstateId)
@@ -43,50 +43,59 @@ export class RealEstateDetailsComponent implements OnInit {
         // this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.realEstateDetailsMock.content);
 
         //TODO: make api call for details, add backend
-        this.realEstateService.getRealEstateById(this.realEstateId)
-          .subscribe(realEstate => {
-            this.realEstateDetails = realEstate
-            this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.realEstateDetails.content);
+        this.realEstateService
+          .getRealEstateById(this.realEstateId)
+          .subscribe((realEstate) => {
+            this.realEstateDetails = realEstate;
+            this.contentDataSource = new MatTableDataSource<RealEstateContent>(
+              this.realEstateDetails.content
+            );
           });
 
         // this.realEstateService.getContentByRealEstateId(this.realEstateId)
         //   .subscribe(content => {
         //     this.realEstateContent = content
         //   })
-
       }
-    })
+    });
   }
 
   editRealEstate(realEstateId: number) {
     //TODO: add service edit
-    const dialogRef = this.dialog.open(EditRealEstateDialogComponent,
-      {
-        data: {realEstateId: realEstateId},
-      })
+    const dialogRef = this.dialog.open(EditRealEstateDialogComponent, {
+      data: { realEstateId: realEstateId },
+    });
 
     dialogRef.afterClosed().subscribe((realEstateId: number) => {
-      if(realEstateId) {
+      if (realEstateId) {
         //navigiraj na azuriranu nekretninu u details
-        this.contentDataSource = new MatTableDataSource<RealEstateContent>(this.realEstateDetails.content);
-        this.router.navigate([`/real-estates/details/${realEstateId}`])
+        this.contentDataSource = new MatTableDataSource<RealEstateContent>(
+          this.realEstateDetails.content
+        );
+        this.router.navigate([`/real-estates/details/${realEstateId}`]);
       }
-    })
+    });
   }
 
-  deleteRealEstate(realEstateName: String) {
+  deleteRealEstate(realEstate: RealEstateDetails) {
     //TODO: add service delete
-    const dialogRef = this.dialog.open(DeleteRealEstateDialogComponent,
-      {
-        data: {realEstateName: realEstateName},
-        position: {top: '3rem'}
-      })
+    const dialogRef = this.dialog.open(DeleteRealEstateDialogComponent, {
+      data: { realEstateName: realEstate.realEstateName },
+      position: { top: '3rem' },
+    });
 
-    dialogRef.afterClosed().subscribe(realEstateId => {
+    dialogRef.afterClosed().subscribe((realEstateId) => {
       //if(result)
-        //TODO: delete by id
-      this.router.navigate([`/real-estates`])
-    })
+      //TODO: delete by id
+      this.realEstateService
+        .deleteRealEstate(realEstate.id)
+        .subscribe((res) => {
+          console.log(res);
+        });
+      this.contentDataSource = new MatTableDataSource<RealEstateContent>(
+        this.realEstateDetails.content
+      );
+      this.router.navigate([`/real-estates`]);
+    });
   }
-
 }
