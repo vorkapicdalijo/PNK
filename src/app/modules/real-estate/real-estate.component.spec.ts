@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { Observable, Subject, of } from 'rxjs';
+import { of } from 'rxjs';
 import { RealEstate } from 'src/app/models/real-estate.model';
 import { RealEstateService } from '../real-estate.service';
 import { RealEstateComponent } from './real-estate.component';
@@ -26,11 +25,31 @@ describe('RealEstateComponent', () => {
   let mockDialog: jasmine.SpyObj<MatDialog>;
 
   const mockRealEstates: RealEstate[] = [
-    // Mock real estate objects
+    {
+      id: 1,
+      realEstateName: 'Mock Real Estate 1',
+      realEstateType: 'Type 1',
+      realEstateCity: 'Location 1',
+      realEstateCountry: 'Location 1',
+      dateAdded: '12.12.12',
+      price: 100000,
+    },
+    {
+      id: 2,
+      realEstateName: 'Mock Real Estate 2',
+      realEstateType: 'Type 2',
+      realEstateCity: 'Location 2',
+      realEstateCountry: 'Location 1',
+      dateAdded: '12.12.12',
+      price: 200000,
+    },
   ];
 
   beforeEach(async () => {
-    mockRealEstateService = jasmine.createSpyObj('RealEstateService', ['getRealEstates', 'deleteRealEstate']);
+    mockRealEstateService = jasmine.createSpyObj('RealEstateService', [
+      'getRealEstates',
+      'deleteRealEstate',
+    ]);
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
     mockDialog = jasmine.createSpyObj('MatDialog', ['open']);
 
@@ -39,7 +58,7 @@ describe('RealEstateComponent', () => {
       providers: [
         { provide: RealEstateService, useValue: mockRealEstateService },
         { provide: Router, useValue: mockRouter },
-        { provide: MatDialog, useValue: mockDialog }
+        { provide: MatDialog, useValue: mockDialog },
       ],
       imports: [
         HttpClientTestingModule,
@@ -81,9 +100,10 @@ describe('RealEstateComponent', () => {
 
     component.openRealEstateDetails(realEstateId);
 
-    expect(mockRouter.navigate).toHaveBeenCalledWith([`/real-estates/details/${realEstateId}`]);
+    expect(mockRouter.navigate).toHaveBeenCalledWith([
+      `/real-estates/details/${realEstateId}`,
+    ]);
   });
-
 
   it('should apply filter to the data source', () => {
     const filterValue = 'test filter';
@@ -108,18 +128,23 @@ describe('RealEstateComponent', () => {
       },
     ];
 
-  const mockDataSource = new MatTableDataSource(mockData);
-  const mockPaginator: MatPaginator = jasmine.createSpyObj('MatPaginator', ['firstPage']);
-  Object.defineProperty(mockDataSource, 'paginator', { get: () => mockPaginator });
+    const mockDataSource = new MatTableDataSource(mockData);
+    const mockPaginator: MatPaginator = jasmine.createSpyObj('MatPaginator', [
+      'firstPage',
+    ]);
+    Object.defineProperty(mockDataSource, 'paginator', {
+      get: () => mockPaginator,
+    });
 
-  component.dataSource = mockDataSource;
+    component.dataSource = mockDataSource;
 
-  component.applyFilter({ target: { value: filterValue } } as unknown as Event);
+    component.applyFilter({
+      target: { value: filterValue },
+    } as unknown as Event);
 
-  expect(component.dataSource.filter).toBe(filterValue);
-  expect(mockPaginator.firstPage).toHaveBeenCalled();
+    expect(component.dataSource.filter).toBe(filterValue);
+    expect(mockPaginator.firstPage).toHaveBeenCalled();
   });
-
 
   it('should open the add real estate dialog', () => {
     const dialogRef = jasmine.createSpyObj('MatDialogRef', ['afterClosed']);
@@ -141,13 +166,17 @@ describe('RealEstateComponent', () => {
 
     component.editRealEstate(realEstateId);
 
-    expect(mockDialog.open).toHaveBeenCalledWith(EditRealEstateDialogComponent, { data: { realEstateId: realEstateId } });
-    expect(mockRouter.navigate).toHaveBeenCalledWith([`/real-estates/details/${123}`]);
+    expect(mockDialog.open).toHaveBeenCalledWith(
+      EditRealEstateDialogComponent,
+      { data: { realEstateId: realEstateId } }
+    );
+    expect(mockRouter.navigate).toHaveBeenCalledWith([
+      `/real-estates/details/${123}`,
+    ]);
   });
 
   it('should open the delete real estate dialog', () => {
     const realEstate: RealEstate = {
-      // Mock real estate object
       id: 0,
       dateAdded: '12.12.2012',
       price: 1200,
@@ -155,7 +184,6 @@ describe('RealEstateComponent', () => {
       realEstateCountry: 'Test',
       realEstateName: 'Test',
       realEstateType: 'Test',
-
     };
     const dialogRef = jasmine.createSpyObj('MatDialogRef', ['afterClosed']);
     dialogRef.afterClosed.and.returnValue(of(123));
@@ -165,8 +193,16 @@ describe('RealEstateComponent', () => {
 
     component.deleteRealEstate(realEstate);
 
-    expect(mockDialog.open).toHaveBeenCalledWith(DeleteRealEstateDialogComponent, { data: { realEstateName: realEstate.realEstateName }, position: { top: '3rem' } });
-    expect(mockRealEstateService.deleteRealEstate).toHaveBeenCalledWith(realEstate.id);
+    expect(mockDialog.open).toHaveBeenCalledWith(
+      DeleteRealEstateDialogComponent,
+      {
+        data: { realEstateName: realEstate.realEstateName },
+        position: { top: '3rem' },
+      }
+    );
+    expect(mockRealEstateService.deleteRealEstate).toHaveBeenCalledWith(
+      realEstate.id
+    );
     expect(mockRouter.navigate).toHaveBeenCalledWith([`/real-estates`]);
   });
 });
